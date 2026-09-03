@@ -342,10 +342,14 @@ export function healthCoverNeed({ cityTier = "metro", familySize = 1, existingCo
 export function allocationAnalysis(assets = [], riskProfile = "balanced") {
   const target = ALLOCATION_GUIDE.byRisk[riskProfile] || ALLOCATION_GUIDE.byRisk.balanced;
   const groups = { equity:0, debt:0, gold:0, cash:0, realEstate:0, mixed:0, other:0 };
-  let investable = 0;
+  let investable = 0, reserve = 0;
   for (const a of assets) {
     const meta = ASSET_CLASSES[a.assetClass] || ASSET_CLASSES.other;
     if (meta.excludeFromInvestable) continue;
+    // The emergency fund is a reserve held against a shock, not capital being
+    // allocated to a goal. Rebalancing it would defeat its only purpose, so it
+    // sits outside the target mix entirely.
+    if (a.emergency) { reserve += pos(a.value); continue; }
     groups[meta.group] = (groups[meta.group] || 0) + pos(a.value);
     investable += pos(a.value);
   }
@@ -367,11 +371,14 @@ export function allocationAnalysis(assets = [], riskProfile = "balanced") {
 
   // Concentration: the single largest holding as a share of investable assets.
   const largest = assets
-    .filter((a) => !(ASSET_CLASSES[a.assetClass] || {}).excludeFromInvestable)
+    .filter((a) => !(ASSET_CLASSES[a.assetClass] || {}).excludeFromInvestable && !a.emergency)
     .sort((a, b) => pos(b.value) - pos(a.value))[0];
 
   return {
-    investable: R0(investable), target, actual, rows,
+    investable: R0(investable), reserve: R0(reserve), target, actual, rows,
+    reserveNote: reserve > 0
+      ? `₹${R0(reserve).toLocaleString("en-IN")} marked as emergency money is held outside this mix. A reserve exists to be spent at the worst possible moment; rebalancing it would defeat the point.`
+      : "",
     realEstateShare: actual.realEstate || 0,
     maxDrift: Math.max(...rows.map((r) => Math.abs(r.drift))),
     needsRebalance: rows.some((r) => Math.abs(r.drift) > 0.10),

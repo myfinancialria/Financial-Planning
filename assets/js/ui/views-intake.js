@@ -444,7 +444,12 @@ export function viewGoals(c, m) {
         ${field({ label:"Return override", path:`__list.goals.${x.id}.expectedReturn`, type:"pct", value:x.expectedReturn,
           hint:an ? `Default ${an.expectedReturn}% from the horizon` : "" })}
         ${field({ label:"Priority", path:`__list.goals.${x.id}.priority`, type:"select", value:x.priority,
-          options:[opt("must","Must happen"),opt("should","Should happen"),opt("nice","Would be nice")] })}
+          options:[opt("must","Must happen"),opt("should","Should happen"),opt("nice","Would be nice")],
+          hint:"A goal on a fixed date is planned more conservatively than a discretionary one" })}
+        ${field({ label:"Where this goal's money sits today", path:`__list.goals.${x.id}.currentMix`, type:"select",
+          value:x.currentMix, options:[opt("","Not recorded"),opt("equity","Mostly equity"),
+            opt("hybrid","Hybrid or balanced"),opt("debt","Mostly debt or deposits"),
+            opt("mixed","Spread across both"),opt("none","Not started")] })}
       </div>
       ${an ? `<div style="margin-top:12px">
         ${meter(`Funded on current contributions`, an.projected, Math.max(1, an.futureCost),
@@ -455,7 +460,8 @@ export function viewGoals(c, m) {
           <div class="tiny"><span class="muted">Shortfall a month</span><br><b>${inr(an.sipShortfall)}</b></div>
           <div class="tiny"><span class="muted">Horizon guide</span><br><b>${pct(an.recommendedEquity * 100)} equity</b></div>
         </div>
-        <p class="tiny muted" style="margin-top:8px">${esc(an.horizonNote)}</p>
+        <p class="tiny muted" style="margin-top:8px">${esc(an.horizonNote)}
+          <button class="btn btn--quiet btn--sm" data-goto="goalplan" style="margin-left:8px">Allocation for this goal →</button></p>
       </div>` : ""}
     </div>`;
   }).join("");

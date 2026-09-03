@@ -1,9 +1,9 @@
 {
   "kind": "financial-planning-client",
   "version": 1,
-  "exportedAt": "2026-09-03T16:11:11.169Z",
+  "exportedAt": "2026-09-03T18:14:02.974Z",
   "client": {
-    "id": "cafmkmg82fnk",
+    "id": "cjl1coqhgfrx",
     "version": 1,
     "createdAt": "2026-09-03",
     "updatedAt": "2026-09-03",
@@ -186,7 +186,7 @@
         "id": "a3",
         "name": "Equity mutual funds — 6 schemes",
         "assetClass": "equityMf",
-        "value": 5400000,
+        "value": 7100000,
         "asOf": "2026-09-01",
         "owner": "self",
         "nominee": "Karthik"
@@ -240,7 +240,7 @@
         "id": "a9",
         "name": "Debt mutual funds",
         "assetClass": "debtMf",
-        "value": 700000,
+        "value": 450000,
         "asOf": "2026-09-01",
         "owner": "self",
         "nominee": "Karthik"
@@ -437,7 +437,9 @@
     "assumptions": {},
     "settings": {
       "taxYear": "2026-27",
-      "regime": "auto"
+      "regime": "auto",
+      "lastRebalanced": "2024-02-10",
+      "hasDemat": true
     },
     "notes": "Worked example. Every figure is invented — it exists to show the tool with a full file loaded."
   }

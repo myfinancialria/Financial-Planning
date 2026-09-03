@@ -60,7 +60,7 @@ export function blankClient(name = "Untitled client") {
       s80EEB: "", s80G: "", s80GG: "", s80TTA: "", s80U: "", s24b: "",
     },
     assumptions: {},
-    settings: { taxYear: "2026-27", regime: "auto" },
+    settings: { taxYear: "2026-27", regime: "auto", lastRebalanced: "", hasDemat: null },
     notes: "",
   };
 }

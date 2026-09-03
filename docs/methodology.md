@@ -113,6 +113,87 @@ above 75%, *behind* above 40%, and *critical* below that.
 
 ---
 
+## 5a. Goal allocation and fund categories
+
+**Horizon binds; the profile modulates.** Target equity for a goal is
+`min(profile equity, horizon ceiling) + priority tilt`, clamped to the ceiling. The ceiling is a
+continuous curve, not steps, because a goal does not become differently investable the day it
+crosses a band boundary:
+
+| Horizon | Equity ceiling |
+|---|---|
+| ≤ 1 year | 0% |
+| 1 – 3 years | 0 → 15% |
+| 3 – 5 years | 15 → 30% |
+| 5 – 10 years | 30 → 65% |
+| 10 – 15 years | 65 → 80% |
+| > 15 years | 80% |
+
+**The priority tilt fades with horizon.** A goal marked *must happen* is tilted 8 points more
+conservative, *would be nice* 4 points less so — but multiplied by `max(0, 1 − years/15)`. A car
+needed in three years earns nearly the full tilt; a retirement twenty years out earns none of it,
+because time to recover is itself a form of safety.
+
+**Gold** is capped at 10% of the goal and at 18% of whatever is not equity, and is dropped entirely
+inside three years, where its own volatility is the problem it was meant to solve.
+
+**Category sleeves.** The equity share splits into core (large cap, flexi cap, broad index),
+satellite (mid, small) and a diversifier (international), with satellite capacity the lesser of
+what the horizon permits and what the profile permits. Small cap appears only beyond ten years.
+ELSS replaces part of the core only where the old regime is in force *and* s.80C is genuinely
+unfilled. The debt share is driven by horizon alone, from liquid inside a year through to corporate
+bond, target maturity and gilt beyond ten.
+
+**Consolidation.** Deployable money per year sets a scheme budget — two schemes below ₹60,000 a
+year, rising to nine above ₹10 lakh. Merging happens strictly *within* an asset group, so
+consolidation can never quietly undo the allocation. Where a whole group is too small to earn a
+scheme, it is dropped explicitly, its weight handed to the nearest surviving group, and the change
+reported. Below three slots with more than one group in play, the tool says so and routes to a
+single hybrid scheme rather than emitting a mangled split.
+
+**Categories, not schemes.** The framework is SEBI's circular of 26 February 2026, which removed
+solution-oriented schemes, added Life Cycle Funds and Sectoral Debt Funds, and renamed the debt
+duration categories. A category mandate is written by the regulator and changes rarely; a scheme's
+manager, mandate drift, expense ratio and relative performance change constantly.
+
+**Fund taxation** follows s.50AA as narrowed from FY 2025-26: only a fund holding more than 65% in
+debt and money market is a specified mutual fund taxed wholly at slab. Gold and international ETFs
+and funds of funds fell out of it — a listed gold ETF now reaches long term in twelve months, a
+gold fund of funds in twenty-four. Hybrids holding 35–65% equity sit in their own band at
+twenty-four months.
+
+---
+
+## 5b. Rebalancing
+
+**Bands: the 5/25 rule.** A sleeve is out of tolerance at 5 percentage points absolute *or* 25% of
+its own target weight — whichever is the tighter test for that sleeve. On a 57% equity target the
+5-point rule binds; on a 7% gold sleeve the 25% rule binds at under 2 points. Floored at 1 point.
+
+**Cadence: annual review, act only on a breach.** Calendar rebalancing on its own trades when
+nothing has moved, and in a taxable Indian portfolio every one of those trades costs 12.5% or 20%
+of the gain. Pure threshold rebalancing needs constant monitoring. The hybrid gets most of the
+benefit at a fraction of the tax.
+
+**The ladder is ordered by tax cost, not tidiness:**
+
+1. Point new contributions at the underweight sleeve — no sale, no tax, no exit load.
+2. Switch inside NPS and EPF — the one place a portfolio can be rebalanced with no tax
+   consequence at all.
+3. Sell down the overweight sleeve — last. The tool computes the actual cost: the embedded gain
+   (estimated from the recorded unrealised gain against equity holdings), less the unused ₹1.25
+   lakh s.112A exemption, taxed at 12.5%, with the 20% short-term figure shown alongside because
+   the difference is usually larger than the drift being corrected.
+
+**The emergency fund is excluded from all of this.** A reserve exists to be spent at the worst
+possible moment; rebalancing it would defeat its only purpose.
+
+**The portfolio target is goal-weighted**, blended across goals by the corpus each needs, rather
+than a single house allocation for the profile. Where no goals are recorded it falls back to the
+risk profile and says so.
+
+---
+
 ## 6. Life cover
 
 Computed two ways, and the recommendation is the **needs** figure:
@@ -164,6 +245,8 @@ Weighted 0-100: protection 25, emergency buffer 20, savings rate 20, debt load 1
 
 ## 10. What this does not model
 
+Scheme selection within a category; expense ratios, tracking error and manager risk; the tax cost
+of the glide path's own steps (flagged, not netted); sequence-of-returns risk on the glide path.
 Clubbing of income; set-off and carry-forward across years; MAT/AMT; HUF and trust structures;
 ESOP perquisite timing and the two-stage taxation of RSUs; foreign tax credit under Rule 128;
 GST; stamp duty; the tax cost of rebalancing (flagged, not computed); sequence-of-returns risk in

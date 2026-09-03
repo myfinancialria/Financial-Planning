@@ -11,6 +11,8 @@ import { netWorth, cashflow, ratios, analyseGoals, lifeCoverNeed, healthCoverNee
 import { findings, taxPlaybook, actionPlan, complianceChecklist, feeCheck,
          scoreRiskProfile } from "./calc/ria.js";
 import { ASSUMPTIONS } from "./rules/tax-rules.js";
+import { buildGoalPlan, portfolioTarget, rebalancePlan, targetMix,
+         equityCeilingFor, nextGlideStep } from "./calc/allocation.js";
 
 const n = (v) => Number(v) || 0;
 const pos = (v) => Math.max(0, n(v));
@@ -154,7 +156,7 @@ export function computeAll(c) {
   /* --- risk, allocation, ratios ------------------------------------------ */
   const risk = scoreRiskProfile(c.profile.riskAnswers || {});
   const riskProfile = c.profile.riskProfile || risk?.category || "balanced";
-  const allocation = allocationAnalysis(c.assets || [], riskProfile);
+  let allocation = allocationAnalysis(c.assets || [], riskProfile);
   const ratioList = ratios({
     monthlyIncome: monthlyTakeHome, monthlyExpenses: exp.monthly,
     monthlyEmi: nw.monthlyEmi, monthlyInvestments: monthlySipTotal,
@@ -220,6 +222,64 @@ export function computeAll(c) {
 
   const marginal = marginalRateAt(taxResult.totalIncome, chosenRegime, age, residency);
 
+  /* --- allocation: per-goal plans, portfolio target, rebalancing ---------- */
+  const retiralAssets = (c.assets || [])
+    .filter((a) => ["epf", "ppf", "nps", "smallSavings"].includes(a.assetClass))
+    .reduce((t, a) => t + pos(a.value), 0);
+  const npsEpfSwitchable = (c.assets || [])
+    .filter((a) => ["nps", "epf"].includes(a.assetClass))
+    .reduce((t, a) => t + pos(a.value), 0);
+  const equityAssets = (c.assets || [])
+    .filter((a) => ["equityMf", "stocks", "intl", "esop"].includes(a.assetClass))
+    .reduce((t, a) => t + pos(a.value), 0);
+
+  const hasDemat = c.settings?.hasDemat != null
+    ? !!c.settings.hasDemat
+    : (c.assets || []).some((a) => ["stocks", "esop"].includes(a.assetClass) && pos(a.value) > 0);
+
+  const s80CRoom = chosenRegime === "old" ? Math.max(0, 150000 - pos(d.s80C)) : 0;
+
+  // How much of the total debt requirement is already met by EPF, PPF and NPS —
+  // money that is already debt and already tax-favoured.
+  const debtRequirement = goals.rows.reduce((t, g) =>
+    t + pos(g.futureCost) * targetMix({ years: g.years, riskProfile,
+      priority: g.priority }).debt, 0);
+  const retiralCoverShare = debtRequirement > 0
+    ? Math.min(1, retiralAssets / debtRequirement) : 0;
+
+  const goalPlans = goals.rows.map((g) => buildGoalPlan(g, {
+    riskProfile, marginalRate: marginal, hasDemat,
+    oldRegimeS80CRoom: s80CRoom,
+    retiralCover: ["retirement"].includes(g.kind) ? retiralCoverShare : 0,
+  }));
+
+  const pTarget = portfolioTarget(goalPlans, riskProfile);
+  // The portfolio target is the goal-weighted blend where goals exist, so the
+  // dashboard's drift chart and this page cannot disagree with each other.
+  if (pTarget.derivedFrom === "goals") {
+    allocation = { ...allocation, target: pTarget,
+      rows: allocation.rows.map((r) => {
+        const t = pTarget[r.key] ?? r.target;
+        return { ...r, target: t, drift: r.actual - t,
+                 rupeeDrift: Math.round((r.actual - t) * allocation.investable) };
+      }),
+      targetDerivedFrom: "goals" };
+    allocation.maxDrift = Math.max(...allocation.rows.map((r) => Math.abs(r.drift)));
+    allocation.needsRebalance = allocation.rows.some((r) => Math.abs(r.drift) > 0.10);
+  }
+  const exemptionHeadroom = Math.max(0, 125000 - pos(taxResult.capitalGains?.s112A?.exemptionUsed));
+  const rebalance = rebalancePlan({
+    actual: allocation.actual, target: pTarget,
+    investable: allocation.investable,
+    monthlyContribution: monthlySipTotal,
+    lastRebalanced: c.settings?.lastRebalanced || null,
+    equityExemptionHeadroom: exemptionHeadroom,
+    unrealisedEquityGainShare: equityAssets > 0
+      ? Math.min(0.9, pos(c.income.unrealisedEquityGain) / equityAssets) : 0.25,
+    marginalRate: marginal,
+    insideRetiral: npsEpfSwitchable,
+  });
+
   return {
     client: c, age, residency, isNri, assumptions: A,
     salary: { components: salaryComponents, employerNps, hra, basicDa,
@@ -236,6 +296,9 @@ export function computeAll(c) {
     allocation, ratioList, risk, riskProfile, estate, health, threePlan,
     findings: findingsList, playbook, playbookAlt, altRegime, actions, compliance,
     residencyTest, ctx,
+    goalPlans, portfolioTargetMix: pTarget, rebalance,
+    allocationInputs: { retiralAssets, npsEpfSwitchable, equityAssets, hasDemat,
+                        s80CRoom, retiralCoverShare, exemptionHeadroom },
   };
 }
 

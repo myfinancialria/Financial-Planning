@@ -31,12 +31,30 @@ gains, no senior-citizen slab, no 20%-with-indexation option on pre-July-2024 pr
 FCNR interest exempt while NRO interest bears 30% at source, and the s.197 lower-deduction
 certificate flagged before any Indian property sale rather than after.
 
+**Goal-by-goal allocation, in SEBI fund categories.** Each goal gets its own equity/debt/gold mix,
+because a car needed in three years and a retirement twenty years out are not the same problem.
+Horizon sets the ceiling and the risk profile decides where under it to sit — an aggressive
+investor still cannot load equity into an eighteen-month goal, and a conservative one still needs
+equity over twenty-five years. The mix is then broken into **categories** under SEBI's 26 February
+2026 framework, with the rupee amount per category, the tax treatment of each, and a glide path
+that steps equity down as the date approaches. It recommends categories, never scheme names:
+a category mandate is regulated and durable, a scheme is a judgement that goes stale in a quarter.
+It also refuses to over-diversify — below a certain contribution it says so and routes to a single
+hybrid scheme rather than emitting four ₹500 SIPs.
+
+**Rebalancing, with the tax cost attached.** 5/25 bands — five points absolute or 25% of the
+sleeve's own weight, whichever is tighter. Annual review, act only on a breach, because in India
+every rebalancing sale is a taxable event with no relief on the way back in. The action ladder is
+ordered by tax cost, not tidiness: redirect new contributions first, then switch inside NPS and
+EPF where it is free, and sell last — with the actual rupee tax computed against the unused
+₹1.25 lakh s.112A exemption.
+
 **Analysis, not just arithmetic.** Findings ranked by severity, each stating a fact about the
 client's own position and *why it matters*. A ranked tax playbook that prices every lever at the
 client's own marginal rate and states the catch. A dated action plan. Goal funding, life and
-health cover gaps computed two ways, allocation drift against the risk profile, prepay-versus-
-invest on every loan, and a retirement page that reconciles what the client *asked for* against
-what their spending actually *implies* — because those two numbers usually disagree.
+health cover gaps computed two ways, prepay-versus-invest on every loan, and a retirement page
+that reconciles what the client *asked for* against what their spending actually *implies* —
+because those two numbers usually disagree.
 
 **The SEBI layer.** Risk profiling on the capacity/willingness/knowledge split, with the lower of
 capacity and willingness governing. A suitability check. A compliance checklist against the
@@ -66,13 +84,17 @@ HTTP origin.)
 ### Tests
 
 ```bash
-node test/tax.test.mjs      # 37 assertions, hand-computed
-node test/finance.test.mjs  # 21 assertions
-node test/model.test.mjs    # end-to-end, resident and NRI
+node test/tax.test.mjs         # 37 assertions, hand-computed
+node test/finance.test.mjs     # 21 assertions
+node test/allocation.test.mjs  # 43 assertions — mixes, glide paths, bands, rebalancing
+node test/model.test.mjs       # end-to-end, resident and NRI
 ```
 
 The tax tests are worth reading before trusting the engine: each case states the expected figure
-and the arithmetic behind it, so a wrong answer is visible rather than plausible.
+and the arithmetic behind it, so a wrong answer is visible rather than plausible. The allocation
+suite checks properties rather than fixed numbers — that 135 combinations of horizon, profile and
+priority all sum to exactly one and never breach the ceiling, that consolidation never silently
+merges across asset groups, and that a glide path only ever de-risks.
 
 ---
 
@@ -81,9 +103,11 @@ and the arithmetic behind it, so a wrong answer is visible rather than plausible
 ```
 assets/js/
   rules/tax-rules.js     Statutory parameters, isolated so a Finance Act change is a data edit
+  rules/fund-categories.js  SEBI scheme categories and their taxation, Feb 2026 framework
   calc/tax.js            The tax engine — both regimes, all heads, special rates, surcharge
   calc/finance.js        Time value of money, EMI and amortisation, retirement mathematics
-  calc/plan.js           Net worth, ratios, goals, cover needs, allocation, health score
+  calc/plan.js           Net worth, ratios, goals, cover needs, drift, health score
+  calc/allocation.js     Goal mixes, category sleeves, glide paths, rebalancing plan
   calc/ria.js            Findings, tax playbook, action plan, risk profiling, compliance
   model.js               Where a client record becomes a computed picture — one integration point
   charts.js              SVG charts: donut, bars, stacked, waterfall, line, slab step, gauge, timeline
@@ -101,16 +125,19 @@ Only structural changes — adding a row, switching regime, changing residency �
 
 Slabs, rebates, surcharge bands, deduction ceilings, capital-gains rates, small-savings rates,
 NRI rules and the SEBI fee caps are all data in `assets/js/rules/tax-rules.js`, each with the
-date or Finance Act it came from. Editing that file is how you move the tool to a new tax year.
+date or Finance Act it came from. Fund categories, their mandates and their taxation live in
+`assets/js/rules/fund-categories.js`, tied to the SEBI circular they come from. Editing those two
+files is how you move the tool to a new tax year or a new categorisation framework.
 `assets/js/calc/` reads those constants and should not need to change.
 
 ---
 
 ## What it deliberately does not do
 
-It holds no assets, places no orders, and has no execution capability. It does not recommend a
-product, a fund, or a policy — it measures a position against the client's own stated goals, their
-recorded profile, and the statutory limits, and leaves the judgement where the regulations put it.
+It holds no assets, places no orders, and has no execution capability. It recommends asset
+allocations and SEBI fund *categories* — never a scheme, an AMC, or a product. It measures a
+position against the client's own stated goals, their recorded profile, and the statutory limits,
+and leaves the judgement where the regulations put it.
 
 It also does not model: clubbing provisions, cross-year set-off and carry-forward, MAT/AMT, HUF
 and trust structures, ESOP perquisite timing, foreign tax credit under Rule 128, or treaty

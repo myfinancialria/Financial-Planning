@@ -56,9 +56,17 @@ export function viewDashboard(c, m) {
     <div class="cards c2">
       <div><div id="chAlloc"></div></div>
       <div>
-        <h4 style="margin-bottom:10px">Against a ${esc(m.riskProfile)} target</h4>
+        <h4 style="margin-bottom:10px">Against ${m.allocation.targetDerivedFrom === "goals"
+          ? "the goal-weighted target" : `a ${esc(m.riskProfile)} target`}</h4>
         <div id="chDrift"></div>
-        <p class="tiny muted" style="margin-top:8px">Dashed tick marks the target weight. Hybrid holdings are split evenly between equity and debt for this comparison. Self-occupied property is excluded from investable assets throughout.</p>
+        <p class="tiny muted" style="margin-top:8px">Dashed tick marks the target weight.
+          ${m.allocation.targetDerivedFrom === "goals"
+            ? `Target is blended across the ${m.goalPlans.length} recorded goals — what each one actually needs at its own horizon — rather than a single house allocation for a ${esc(m.riskProfile)} profile.`
+            : `No goals recorded, so the target falls back to the ${esc(m.riskProfile)} risk profile.`}
+          Hybrid holdings are split evenly between equity and debt for this comparison. Self-occupied property is excluded from investable assets throughout.${
+          m.allocation.reserve ? ` The ${inrShort(m.allocation.reserve)} emergency reserve is excluded too — a reserve is not rebalanced.` : ""}</p>
+        ${m.rebalance.needsAction ? `<div class="btnrow" style="margin-top:10px">
+          <button class="btn btn--quiet btn--sm" data-goto="rebalance">${m.rebalance.breaches.length} sleeve${m.rebalance.breaches.length === 1 ? "" : "s"} outside the band — see the plan</button></div>` : ""}
       </div>
     </div>`, {
       aside: `<span class="chip">${inrShort(m.allocation.investable)} investable</span>`,
@@ -559,6 +567,37 @@ export function viewReport(c, m) {
         {t:pct(g.fundedPct),n:true},{t:inr(g.requiredSip),n:true}]),
       { foot:["Total","",{t:inr(m.goals.totalFutureCost),n:true},{t:inr(m.goals.totalProjected),n:true},"",
         {t:inr(m.goals.totalRequiredSip),n:true}] }) : `<p class="muted">No goals recorded.</p>`}
+
+    ${m.goalPlans.length ? `
+    <h2 style="margin:26px 0 12px">Recommended allocation</h2>
+    ${table([{t:"Goal"},{t:"Horizon",n:true},{t:"Equity",n:true},{t:"Debt",n:true},{t:"Gold",n:true},{t:"Set by"}],
+      m.goalPlans.map((p) => [esc(p.name), {t:`${p.years}y`,n:true},
+        {t:pct(p.mix.equity * 100),n:true},{t:pct(p.mix.debt * 100),n:true},
+        {t:pct(p.mix.gold * 100),n:true}, esc(p.boundBy)]),
+      { foot:["Portfolio blend","",{t:pct(m.portfolioTargetMix.equity * 100),n:true},
+        {t:pct(m.portfolioTargetMix.debt * 100),n:true},
+        {t:pct(m.portfolioTargetMix.gold * 100),n:true},""] })}
+    ${m.goalPlans.map((p) => `
+      <p style="margin:14px 0 4px;font-size:13.5px"><b>${esc(p.name)}</b>
+        <span class="tiny muted">· ${inr(p.contribution)} a month across ${p.rows.length}
+        ${p.rows.length === 1 ? "category" : "categories"}</span></p>
+      ${table([{t:"Category"},{t:"Weight",n:true},{t:"Monthly",n:true}],
+        p.rows.map((r) => [esc(r.name), {t:pct(r.weight * 100, 1),n:true},
+          {t:r.monthly ? inr(r.monthly) : "—",n:true}]))}`).join("")}
+    <p class="tiny muted" style="margin-top:10px">Categories, not schemes. A category's mandate is set
+      by SEBI and changes rarely; scheme selection is a separate judgement, recorded separately.
+      Framework: SEBI circular on Categorization and Rationalization of Mutual Fund Schemes, 26 February 2026.</p>
+
+    <h2 style="margin:26px 0 12px">Rebalancing</h2>
+    ${table([{t:"Sleeve"},{t:"Target",n:true},{t:"Actual",n:true},{t:"Drift",n:true},{t:"Band",n:true},{t:"Status"}],
+      m.rebalance.rows.map((r) => [r.key.charAt(0).toUpperCase() + r.key.slice(1),
+        {t:pct(r.target * 100, 1),n:true},{t:pct(r.actual * 100, 1),n:true},
+        {t:`${r.drift > 0 ? "+" : ""}${pct(r.drift * 100, 1)}`,n:true},
+        {t:`±${pct(r.band * 100, 1)}`,n:true}, r.breached ? "Outside" : "Within"]))}
+    <p style="font-size:13.5px;margin-top:10px">${m.rebalance.needsAction
+      ? `<b>Action due.</b> ${inr(m.rebalance.correctionNeeded)} to move. ${esc(m.rebalance.ladder.map((l) => l.action).join(" → "))}. Selling would cost about ${inr(m.rebalance.tax.taxIfSoldLongTerm)} in tax; redirecting contributions instead costs nothing and takes about ${m.rebalance.monthsByContribution} months.`
+      : `<b>Within tolerance.</b> No sleeve is outside its band; rebalancing now would realise tax for no risk reduction.`}
+      Next scheduled review: ${esc(m.rebalance.nextReview.label)}.</p>` : ""}
 
     <h2 style="margin:26px 0 12px">Tax</h2>
     ${table([{t:"Step"},{t:"Amount",n:true}],

@@ -14,6 +14,7 @@ import { viewProfile, viewIncome, viewExpenses, viewAssets, viewGoals,
          viewInsurance, viewEstate, viewDeductions } from "./ui/views-intake.js";
 import { viewDashboard, viewTax, viewAnalysis, viewLoans, viewRetirement,
          viewReference, viewReport, mountCharts } from "./ui/views-analysis.js";
+import { viewGoalPlan, viewRebalance, mountGoalPlanCharts } from "./ui/views-goalplan.js";
 import { hideTip } from "./charts.js";
 
 const store = new Store();
@@ -28,6 +29,10 @@ const SECTIONS = [
       title: "Tax", blurb: "Both regimes computed side by side, every step shown, and the levers ranked by what they are actually worth." },
     { id: "analysis",   label: "RIA analysis",  view: viewAnalysis,
       title: "Analysis and action plan", blurb: "Findings, the three-plan sequence, a dated action plan, suitability, and the compliance record." },
+    { id: "goalplan",   label: "Goal plan",     view: viewGoalPlan, count: (c) => (c.goals || []).length || null,
+      title: "Goal plan and allocation", blurb: "What each goal should hold, in which SEBI fund categories, and how the mix steps down as the date approaches." },
+    { id: "rebalance",  label: "Rebalancing",   view: viewRebalance,
+      title: "Rebalancing", blurb: "Whether the portfolio is outside its bands, when to act, and the cheapest way to close the gap." },
     { id: "loans",      label: "Debt",          view: viewLoans,
       title: "Debt", blurb: "Amortisation, post-tax cost, and whether prepaying beats investing the same money." },
     { id: "retirement", label: "Retirement",    view: viewRetirement,
@@ -134,7 +139,7 @@ function render() {
     `<div class="section active" id="sec_${sec.id}">${sec.view(c, model)}</div>`;
 
   renderNav(); renderTopbar();
-  try { mountCharts(sec.id, c, model); }
+  try { mountCharts(sec.id, c, model); mountGoalPlanCharts(sec.id, c, model); }
   catch (e) { console.warn("Chart mounting failed:", e); }
 
   document.querySelectorAll("[data-risk]").forEach((el) => {
@@ -251,7 +256,7 @@ bindFields(document.getElementById("content"), {
   },
 }, (path) => {
   // Structural fields change what is on screen; re-render for those only.
-  if (/^(settings\.regime|profile\.residency|profile\.riskProfile|assumptions\.|income\.receivesHra|__list\.(assets|liabilities|goals|insurance)\.[^.]+\.(assetClass|type|category|kind))/.test(path)) {
+  if (/^(settings\.(regime|lastRebalanced|hasDemat)|profile\.residency|profile\.riskProfile|assumptions\.|income\.receivesHra|__list\.(assets|liabilities|goals|insurance)\.[^.]+\.(assetClass|type|category|kind|priority|currentMix|emergency))/.test(path)) {
     clearTimeout(window.__rr);
     window.__rr = setTimeout(render, 260);
   } else {
