@@ -1,0 +1,444 @@
+{
+  "kind": "financial-planning-client",
+  "version": 1,
+  "exportedAt": "2026-09-03T16:11:11.169Z",
+  "client": {
+    "id": "cafmkmg82fnk",
+    "version": 1,
+    "createdAt": "2026-09-03",
+    "updatedAt": "2026-09-03",
+    "profile": {
+      "name": "Ananya Raghavan",
+      "dob": "1988-04-12",
+      "gender": "Female",
+      "pan": "ABCDE1234F",
+      "maritalStatus": "Married",
+      "city": "Bengaluru",
+      "cityTier": "metro",
+      "occupation": "Product manager",
+      "employerType": "private",
+      "residency": "resident",
+      "citizenship": "indian",
+      "countryOfResidence": "",
+      "dtaaAvailable": false,
+      "hasTRC": false,
+      "form10F": false,
+      "daysInIndia": {
+        "cy": "",
+        "py1": "",
+        "py2": "",
+        "py3": "",
+        "py4": "",
+        "last7y": "",
+        "nrYearsOf10": ""
+      },
+      "dependants": [
+        {
+          "id": "d1",
+          "name": "Karthik",
+          "relationship": "spouse",
+          "age": 39,
+          "financiallyDependent": false
+        },
+        {
+          "id": "d2",
+          "name": "Meera",
+          "relationship": "child",
+          "age": 7,
+          "financiallyDependent": true
+        },
+        {
+          "id": "d3",
+          "name": "Lakshmi",
+          "relationship": "parent",
+          "age": 67,
+          "financiallyDependent": true
+        }
+      ],
+      "riskAnswers": {
+        "horizon": 5,
+        "stability": 4,
+        "buffer": 3,
+        "dependants": 2,
+        "drawdown": 4,
+        "tradeoff": 4,
+        "experience": 3,
+        "behaviour": 4
+      },
+      "riskProfile": "balanced",
+      "riskProfileAccepted": true,
+      "adviserName": "",
+      "riaRegNo": "",
+      "agreementDate": "",
+      "feeMode": "",
+      "annualFee": "",
+      "aua": "",
+      "conflictsDisclosed": false,
+      "distributionRelationship": false,
+      "segregationConfirmed": false,
+      "recordsMaintained": false
+    },
+    "income": {
+      "salary": {
+        "basic": 1560000,
+        "da": "",
+        "hra": 780000,
+        "lta": "",
+        "special": 660000,
+        "bonus": 450000,
+        "perquisites": "",
+        "employerNps": 156000,
+        "employerPf": 187200,
+        "professionalTax": 2400
+      },
+      "rentPaid": 0,
+      "metroCity": true,
+      "receivesHra": true,
+      "business": {
+        "scheme": "none",
+        "turnover": "",
+        "digitalShare": "100",
+        "netProfit": ""
+      },
+      "houseProperties": [
+        {
+          "id": "hp1",
+          "name": "Whitefield flat — self-occupied",
+          "type": "self",
+          "annualRent": "",
+          "municipalTax": "",
+          "interest": 435000,
+          "principalRepaid": 123000
+        }
+      ],
+      "other": {
+        "savingsInterest": 22000,
+        "fdInterest": 74000,
+        "dividend": 46000,
+        "familyPension": "",
+        "otherIncome": "",
+        "nreInterest": "",
+        "nroInterest": "",
+        "agricultural": ""
+      },
+      "capitalGains": {
+        "equitySTCG": 65000,
+        "equityLTCG": 40000,
+        "otherSTCG": "",
+        "otherLTCG": "",
+        "propertySTCG": "",
+        "propertyLTCG": "",
+        "vda": "",
+        "debtSlab": ""
+      },
+      "unrealisedEquityGain": 1400000,
+      "unrealisedEquityLoss": 210000,
+      "tdsAlready": 480000,
+      "advanceTaxPaid": ""
+    },
+    "expenses": {
+      "rent": 0,
+      "maintenance": 6500,
+      "utilities": 7200,
+      "internet": 2100,
+      "help": 9000,
+      "groceries": 17500,
+      "dining": 6500,
+      "transport": 6500,
+      "personal": 2800,
+      "schoolFees": 16000,
+      "childcare": 3500,
+      "medical": 2200,
+      "parents": 7500,
+      "shopping": 5500,
+      "subscriptions": 1800,
+      "entertainment": 3000,
+      "travelMonthly": 2500,
+      "vacations": 120000,
+      "festivals": 45000,
+      "propertyTax": 18000,
+      "repairs": 20000,
+      "professional": 12000
+    },
+    "assets": [
+      {
+        "id": "a1",
+        "name": "Savings & sweep-in",
+        "assetClass": "cash",
+        "value": 1150000,
+        "asOf": "2026-09-01",
+        "owner": "self",
+        "nominee": "Karthik",
+        "emergency": true,
+        "accountType": "resident"
+      },
+      {
+        "id": "a2",
+        "name": "Bank fixed deposits",
+        "assetClass": "fd",
+        "value": 800000,
+        "asOf": "2026-09-01",
+        "owner": "joint",
+        "nominee": "Karthik",
+        "emergency": true
+      },
+      {
+        "id": "a3",
+        "name": "Equity mutual funds — 6 schemes",
+        "assetClass": "equityMf",
+        "value": 5400000,
+        "asOf": "2026-09-01",
+        "owner": "self",
+        "nominee": "Karthik"
+      },
+      {
+        "id": "a4",
+        "name": "Direct equity portfolio",
+        "assetClass": "stocks",
+        "value": 1250000,
+        "asOf": "2026-09-01",
+        "owner": "self",
+        "nominee": ""
+      },
+      {
+        "id": "a5",
+        "name": "EPF accumulated",
+        "assetClass": "epf",
+        "value": 3100000,
+        "asOf": "2026-08-31",
+        "owner": "self",
+        "nominee": "Karthik"
+      },
+      {
+        "id": "a6",
+        "name": "PPF",
+        "assetClass": "ppf",
+        "value": 1650000,
+        "asOf": "2026-08-31",
+        "owner": "self",
+        "nominee": "Meera"
+      },
+      {
+        "id": "a7",
+        "name": "NPS Tier-I",
+        "assetClass": "nps",
+        "value": 1080000,
+        "asOf": "2026-09-01",
+        "owner": "self",
+        "nominee": "Karthik"
+      },
+      {
+        "id": "a8",
+        "name": "Gold jewellery & SGB",
+        "assetClass": "gold",
+        "value": 1350000,
+        "asOf": "2026-09-01",
+        "owner": "self",
+        "nominee": ""
+      },
+      {
+        "id": "a9",
+        "name": "Debt mutual funds",
+        "assetClass": "debtMf",
+        "value": 700000,
+        "asOf": "2026-09-01",
+        "owner": "self",
+        "nominee": "Karthik"
+      },
+      {
+        "id": "a10",
+        "name": "Employer RSUs, vested",
+        "assetClass": "esop",
+        "value": 2600000,
+        "asOf": "2026-09-01",
+        "owner": "self",
+        "nominee": ""
+      },
+      {
+        "id": "a11",
+        "name": "Flat, self-occupied — Whitefield",
+        "assetClass": "homeSelf",
+        "value": 16500000,
+        "asOf": "2026-04-01",
+        "owner": "joint",
+        "nominee": ""
+      }
+    ],
+    "liabilities": [
+      {
+        "id": "l1",
+        "name": "Home loan — HDFC",
+        "type": "home",
+        "outstanding": 5100000,
+        "rate": 8.6,
+        "emi": 46500,
+        "monthsRemaining": 180,
+        "coBorrower": "Karthik"
+      },
+      {
+        "id": "l2",
+        "name": "Car loan",
+        "type": "car",
+        "outstanding": 540000,
+        "rate": 9.4,
+        "emi": 16800,
+        "monthsRemaining": 36
+      },
+      {
+        "id": "l3",
+        "name": "Credit card, revolving",
+        "type": "creditCard",
+        "outstanding": 145000,
+        "rate": 42,
+        "emi": 7000,
+        "monthsRemaining": 24
+      }
+    ],
+    "goals": [
+      {
+        "id": "g1",
+        "name": "Retirement",
+        "kind": "retirement",
+        "targetYear": 2048,
+        "presentCost": 65000000,
+        "earmarked": 5880000,
+        "monthlySip": 32000,
+        "stepUp": 8,
+        "priority": "must"
+      },
+      {
+        "id": "g2",
+        "name": "Meera's undergraduate education",
+        "kind": "education",
+        "targetYear": 2037,
+        "presentCost": 6000000,
+        "earmarked": 900000,
+        "monthlySip": 12000,
+        "stepUp": 5,
+        "priority": "must"
+      },
+      {
+        "id": "g3",
+        "name": "Meera's postgraduate education",
+        "kind": "education",
+        "targetYear": 2041,
+        "presentCost": 4000000,
+        "earmarked": 0,
+        "monthlySip": 3000,
+        "priority": "should"
+      },
+      {
+        "id": "g4",
+        "name": "Car replacement",
+        "kind": "vehicle",
+        "targetYear": 2029,
+        "presentCost": 1800000,
+        "earmarked": 250000,
+        "monthlySip": 4000,
+        "priority": "nice"
+      },
+      {
+        "id": "g5",
+        "name": "Sabbatical & travel",
+        "kind": "travel",
+        "targetYear": 2032,
+        "presentCost": 2500000,
+        "earmarked": 150000,
+        "monthlySip": 3000,
+        "priority": "nice"
+      }
+    ],
+    "insurance": [
+      {
+        "id": "i1",
+        "category": "life",
+        "policyType": "term",
+        "insurer": "ICICI Pru iProtect",
+        "policyNo": "—",
+        "sumAssured": 20000000,
+        "annualPremium": 28000,
+        "startYear": 2019,
+        "term": 36,
+        "nominee": "Karthik",
+        "mwp": false
+      },
+      {
+        "id": "i2",
+        "category": "life",
+        "policyType": "endowment",
+        "insurer": "LIC Jeevan Anand",
+        "policyNo": "—",
+        "sumAssured": 1500000,
+        "annualPremium": 72000,
+        "startYear": 2014,
+        "term": 21,
+        "nominee": "Karthik"
+      },
+      {
+        "id": "i3",
+        "category": "health",
+        "policyType": "floater",
+        "insurer": "Star Health",
+        "sumAssured": 1000000,
+        "annualPremium": 34000,
+        "startYear": 2021,
+        "nominee": "Karthik"
+      },
+      {
+        "id": "i4",
+        "category": "health",
+        "policyType": "corporate",
+        "insurer": "Employer group cover",
+        "sumAssured": 600000,
+        "annualPremium": 0,
+        "corporate": true,
+        "nominee": "Karthik"
+      },
+      {
+        "id": "i5",
+        "category": "motor",
+        "policyType": "other",
+        "insurer": "—",
+        "sumAssured": 1200000,
+        "annualPremium": 22000,
+        "nominee": ""
+      }
+    ],
+    "estate": {
+      "hasWill": false,
+      "willDate": "",
+      "willRegistered": false,
+      "willLocation": "",
+      "executor": "",
+      "witnesses": "",
+      "indianWill": false,
+      "foreignWill": false,
+      "poa": false,
+      "livingWill": false,
+      "guardian": "",
+      "successionLaw": "hindu",
+      "lastReviewed": "",
+      "notes": "Will drafting discussed at the July 2026 review; not yet executed."
+    },
+    "deductions": {
+      "s80C": 150000,
+      "s80CCD1B": 50000,
+      "s80D": 52000,
+      "s80DD": "",
+      "s80DDB": "",
+      "s80E": "",
+      "s80EEB": "",
+      "s80G": "",
+      "s80GG": "",
+      "s80TTA": 10000,
+      "s80U": "",
+      "s24b": 200000
+    },
+    "assumptions": {},
+    "settings": {
+      "taxYear": "2026-27",
+      "regime": "auto"
+    },
+    "notes": "Worked example. Every figure is invented — it exists to show the tool with a full file loaded."
+  }
+}
